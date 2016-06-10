@@ -1025,14 +1025,15 @@ var Navigator = React.createClass({
    * Replace the current scene with a new route, animated as a push.
    */
   replaceAsPush: function(route) {
-    const activeLength = this.state.presentedIndex + 1;
-    const activeStack = this.state.routeStack.slice(0, activeLength);
-    const activeAnimationConfigStack = this.state.sceneConfigStack.slice(0, activeLength);
-    const nextStack = activeStack.concat([route]);
-    const destIndex = nextStack.length - 1;
-    const nextSceneConfig = this.props.configureScene(route, nextStack);
-    const nextAnimationConfigStack = activeAnimationConfigStack.concat([nextSceneConfig]);
-    const replacedStack = activeStack.slice(0, activeLength - 1).concat([route]);
+    invariant(!!route, 'Must supply route to replace');
+    var activeLength = this.state.presentedIndex + 1;
+    var activeStack = this.state.routeStack.slice(0, activeLength);
+    var activeAnimationConfigStack = this.state.sceneConfigStack.slice(0, activeLength);
+    var nextStack = activeStack.concat([route]);
+    var destIndex = nextStack.length - 1;
+    var nextSceneConfig = this.props.configureScene(route, nextStack);
+    var nextAnimationConfigStack = activeAnimationConfigStack.concat([nextSceneConfig]);
+    var replacedStack = activeStack.slice(0, activeLength - 1).concat([route]);
     this._emitWillFocus(nextStack[destIndex]);
     this.setState({
       routeStack: nextStack,
