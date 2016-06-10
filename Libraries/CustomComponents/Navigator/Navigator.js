@@ -1043,8 +1043,7 @@ var Navigator = React.createClass({
           this.immediatelyResetRouteStack(replacedStack);
         });
       });
-
-  }
+  },
   
   /**
    * Replace the previous scene.
