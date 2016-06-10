@@ -1020,7 +1020,32 @@ var Navigator = React.createClass({
   replace: function(route) {
     this.replaceAtIndex(route, this.state.presentedIndex);
   },
+  
+  /**
+   * Replace the current scene with a new route, animated as a push.
+   */
+  replaceAsPush: function(route) {
+    const activeLength = this.state.presentedIndex + 1;
+    const activeStack = this.state.routeStack.slice(0, activeLength);
+    const activeAnimationConfigStack = this.state.sceneConfigStack.slice(0, activeLength);
+    const nextStack = activeStack.concat([route]);
+    const destIndex = nextStack.length - 1;
+    const nextSceneConfig = this.props.configureScene(route, nextStack);
+    const nextAnimationConfigStack = activeAnimationConfigStack.concat([nextSceneConfig]);
+    const replacedStack = activeStack.slice(0, activeLength - 1).concat([route]);
+    this._emitWillFocus(nextStack[destIndex]);
+    this.setState({
+      routeStack: nextStack,
+      sceneConfigStack: nextAnimationConfigStack,
+    }, () => {
+        this._enableScene(destIndex);
+        this._transitionTo(destIndex, nextSceneConfig.defaultTransitionVelocity, null, () => {
+          this.immediatelyResetRouteStack(replacedStack);
+        });
+      });
 
+  }
+  
   /**
    * Replace the previous scene.
    */
